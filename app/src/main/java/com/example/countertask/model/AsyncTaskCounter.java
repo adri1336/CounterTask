@@ -1,10 +1,11 @@
 package com.example.countertask.model;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.widget.TextView;
 
-public class ThreadedCounter extends Thread
+public class AsyncTaskCounter extends AsyncTask<Void, Void, Void>
 {
     private int counter;
     private TextView tvCount;
@@ -12,7 +13,7 @@ public class ThreadedCounter extends Thread
     private OnCounterFinishedListener onCounterFinishedListener;
     private boolean active;
 
-    public ThreadedCounter(int counter, TextView tvCount, Context context)
+    public AsyncTaskCounter(int counter, TextView tvCount, Context context)
     {
         this.counter = counter;
         this.tvCount = tvCount;
@@ -46,14 +47,14 @@ public class ThreadedCounter extends Thread
     }
 
     @Override
-    public void run()
+    protected Void doInBackground(Void... voids)
     {
         while(active)
         {
             try
             {
                 Thread.sleep(1000);
-                if(!active) return;
+                if(!active) return null;
 
                 counter --;
                 tvCount.post(new Runnable()
@@ -86,5 +87,6 @@ public class ThreadedCounter extends Thread
                 e.printStackTrace();
             }
         }
+        return null;
     }
 }
